@@ -1,5 +1,8 @@
-FROM jenkins/jenkins:2.347-slim
+FROM jenkins/jenkins:slim
 USER root
+ADD ZscalerRootCertificate-2048-SHA256.crt /usr/local/share/ca-certificates/ZscalerRootCertificate-2048-SHA256.crt
+RUN chmod 644 /usr/local/share/ca-certificates/ZscalerRootCertificate-2048-SHA256.crt && update-ca-certificates
+RUN keytool -importcert -trustcacerts -alias Zscaler -file /etc/ssl/certs/ZscalerRootCertificate-2048-SHA256.pem -cacerts -storepass changeit -noprompt
 RUN apt-get update && apt-get install -y apt-transport-https \
        ca-certificates curl gnupg2 \
        software-properties-common
